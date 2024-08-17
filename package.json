@@ -1,0 +1,24 @@
+{
+  "name": "hyperswarm-stats",
+  "version": "0.0.0",
+  "description": "Hyperswarm stats with prometheus support",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/hyperswarm-stats.git"
+  },
+  "keywords": [
+    "Hyperswarm",
+    "stats",
+    "prometheus"
+  ],
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/hyperswarm-stats/issues"
+  },
+  "homepage": "https://github.com/holepunchto/hyperswarm-stats#readme"
+}
