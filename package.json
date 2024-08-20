@@ -21,6 +21,9 @@
     "url": "https://github.com/holepunchto/hyperswarm-stats/issues"
   },
   "homepage": "https://github.com/holepunchto/hyperswarm-stats#readme",
+  "files": [
+    "index.js"
+  ],
   "devDependencies": {
     "b4a": "^1.6.6",
     "brittle": "^3.6.1",
