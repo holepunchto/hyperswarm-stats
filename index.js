@@ -210,28 +210,28 @@ class HyperswarmStats {
 
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_transmitted',
-      help: 'todo',
+      help: 'Total bytes transmitted by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxBytesTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_transmitted',
-      help: 'todo',
+      help: 'Total packets transmitted by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxPacketsTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_received',
-      help: 'todo',
+      help: 'Total bytes received by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxBytesReceived)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_received',
-      help: 'todo',
+      help: 'Total packets received by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxPacketsReceived)
       }
@@ -239,28 +239,28 @@ class HyperswarmStats {
 
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_client_socket_bytes_transmitted',
-      help: 'todo',
+      help: 'Total bytes transmitted by the client socket of the DHT',
       collect () {
         this.set(self.dhtClientSocketBytesTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_client_socket_packets_transmitted',
-      help: 'todo',
+      help: 'Total packets transmitted by the client socket of the DHT',
       collect () {
         this.set(self.dhtClientSocketPacketsTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_client_socket_bytes_received',
-      help: 'todo',
+      help: 'Total bytes received by the client socket of the DHT',
       collect () {
         this.set(self.dhtClientSocketBytesReceived)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_client_socket_packets_received',
-      help: 'todo',
+      help: 'Total packets received by the client socket of the DHT',
       collect () {
         this.set(self.dhtClientSocketPacketsReceived)
       }
@@ -268,28 +268,28 @@ class HyperswarmStats {
 
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_server_socket_bytes_transmitted',
-      help: 'todo',
+      help: 'Total bytes transmitted by the server socket of the DHT',
       collect () {
         this.set(self.dhtServerSocketBytesTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_server_socket_packets_transmitted',
-      help: 'todo',
+      help: 'Total packets transmitted by the server socket of the DHT',
       collect () {
         this.set(self.dhtClientSocketPacketsTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_server_socket_bytes_received',
-      help: 'todo',
+      help: 'Total bytes received by the server socket of the DHT',
       collect () {
         this.set(self.dhtServerSocketBytesReceived)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'dht_server_socket_packets_received',
-      help: 'todo',
+      help: 'Total packets received by the server socket of the DHT',
       collect () {
         this.set(self.dhtServerSocketPacketsReceived)
       }
@@ -297,28 +297,28 @@ class HyperswarmStats {
 
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_transmitted_over_swarm_streams',
-      help: 'todo',
+      help: 'Total bytes transmitted over the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getBytesTransmittedAcrossAllStreams())
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_received_over_swarm_streams',
-      help: 'todo',
+      help: 'Total bytes received over the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getBytesReceivedAcrossAllStreams())
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_transmitted_over_swarm_streams',
-      help: 'todo',
+      help: 'Total packets transmitted over the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getPacketsTransmittedAcrossAllStreams())
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_received_over_swarm_streams',
-      help: 'todo',
+      help: 'Total packets received over the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getPacketsReceivedAcrossAllStreams())
       }
