@@ -5,7 +5,7 @@ const createTestnet = require('hyperdht/testnet')
 const b4a = require('b4a')
 const SwarmStats = require('.')
 
-const DEBUG = false
+const DEBUG = true
 
 test(async (t) => {
   const tPrep = t.test('prep')
