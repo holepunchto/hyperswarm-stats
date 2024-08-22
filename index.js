@@ -277,7 +277,7 @@ class HyperswarmStats {
       name: 'dht_server_socket_packets_transmitted',
       help: 'Total packets transmitted by the server socket of the DHT',
       collect () {
-        this.set(self.dhtClientSocketPacketsTransmitted)
+        this.set(self.dhtServerSocketPacketsTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
