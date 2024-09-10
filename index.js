@@ -32,6 +32,32 @@ class HyperswarmStats {
     return this.swarm.dht.stats.queries
   }
 
+  getAvgCongestionWindow () {
+    let totalCongestionWindow = 0
+    let count = 0
+    for (const conn of this.swarm.connections) {
+      if (conn.rawStream) {
+        count++
+        totalCongestionWindow += conn.rawStream.cwnd
+      }
+    }
+
+    return totalCongestionWindow / count
+  }
+
+  getAvgMTU () {
+    let totalMTU = 0
+    let count = 0
+    for (const conn of this.swarm.connections) {
+      if (conn.rawStream) {
+        count++
+        totalMTU += conn.rawStream.mtu
+      }
+    }
+
+    return totalMTU / count
+  }
+
   getBytesTransmittedAcrossAllStreams () {
     let bytesFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
@@ -321,6 +347,22 @@ class HyperswarmStats {
       help: 'Total packets received over the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getPacketsReceivedAcrossAllStreams())
+      }
+    })
+
+    new promClient.Gauge({ // eslint-disable-line no-new
+      name: 'hyperswarm_avg_congestion_window',
+      help: 'Average size of the congestion window (over all hyperswarm connections)',
+      collect () {
+        this.set(self.getAvgCongestionWindow())
+      }
+    })
+
+    new promClient.Gauge({ // eslint-disable-line no-new
+      name: 'hyperswarm_avg_mtu',
+      help: 'Average size of the Maximum Transmission Unit (over all hyperswarm connections)',
+      collect () {
+        this.set(self.getAvgMTU())
       }
     })
   }
