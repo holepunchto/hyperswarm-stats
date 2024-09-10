@@ -121,6 +121,8 @@ test(async (t) => {
     t.is(getMetricValue(lines, 'hyperswarm_total_bytes_received_over_swarm_streams') > 1, true, 'hyperswarm_total_bytes_received_over_swarm_streams')
     t.is(getMetricValue(lines, 'hyperswarm_total_packets_transmitted_over_swarm_streams') > 1, true, 'hyperswarm_total_packets_transmitted_over_swarm_streams')
     t.is(getMetricValue(lines, 'hyperswarm_total_packets_received_over_swarm_streams') > 1, true, 'hyperswarm_total_packets_received_over_swarm_streams')
+    t.is(getMetricValue(lines, 'hyperswarm_avg_congestion_window') > 1, true, 'hyperswarm_avg_congestion_window')
+    t.is(getMetricValue(lines, 'hyperswarm_avg_mtu') > 1, true, 'hyperswarm_avg_mtu')
   }
 
   await swarm2.destroy()
