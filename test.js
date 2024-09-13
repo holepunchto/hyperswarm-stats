@@ -5,7 +5,7 @@ const createTestnet = require('hyperdht/testnet')
 const b4a = require('b4a')
 const SwarmStats = require('.')
 
-const DEBUG = false
+const DEBUG = true
 
 test(async (t) => {
   const tPrep = t.test('prep')
@@ -123,6 +123,8 @@ test(async (t) => {
     t.is(getMetricValue(lines, 'hyperswarm_total_packets_received_over_swarm_streams') > 1, true, 'hyperswarm_total_packets_received_over_swarm_streams')
     t.is(getMetricValue(lines, 'hyperswarm_avg_congestion_window') > 1, true, 'hyperswarm_avg_congestion_window')
     t.is(getMetricValue(lines, 'hyperswarm_avg_mtu') > 1, true, 'hyperswarm_avg_mtu')
+    t.is(getMetricValue(lines, 'hyperswarm_total_retransmits_over_swarm_streams'), 0, 'hyperswarm_total_retransmits_over_swarm_streams')
+    t.is(getMetricValue(lines, 'hyperswarm_total_fast_recoveries_over_swarm_streams') > 1, true, 'hyperswarm_total_fast_recoveries_over_swarm_streams')
   }
 
   await swarm2.destroy()

@@ -6,12 +6,17 @@ class HyperswarmStats {
     this._packetsTransmittedOverClosedSwarmStreams = 0
     this._bytesReceivedOverClosedSwarmStreams = 0
     this._packetsReceivedOverClosedSwarmStreams = 0
+    this._retransmitsOfClosedSwarmStreams = 0
+    this._fastRecoveriesOfClosedSwarmStreams = 0
+
     swarm.on('connection', conn => {
       conn.on('close', () => {
         this._bytesTransmittedOverClosedSwarmStreams += conn.rawStream?.bytesTransmitted || 0
         this._packetsTransmittedOverClosedSwarmStreams += conn.rawStream?.packetsTransmitted || 0
         this._bytesReceivedOverClosedSwarmStreams += conn.rawStream?.bytesReceived || 0
         this._packetsReceivedOverClosedSwarmStreams += conn.rawStream?.packetsReceived || 0
+        this._retransmitsOfClosedSwarmStreams += conn.rawStream?.retransmits
+        this._fastRecoveriesOfClosedSwarmStreams += conn.rawStream?.fastRecoveries
       })
     })
   }
@@ -56,6 +61,24 @@ class HyperswarmStats {
     }
 
     return totalMTU / count
+  }
+
+  getRetransmitsAcrossAllStreams () {
+    let countFromCurrentConns = 0
+    for (const conn of this.swarm.connections) {
+      countFromCurrentConns += conn.rawStream?.retransmits || 0
+    }
+
+    return countFromCurrentConns + this._retransmitsOfClosedSwarmStreams
+  }
+
+  getFastRecoveriesAcrossAllStreams () {
+    let countFromCurrentConns = 0
+    for (const conn of this.swarm.connections) {
+      countFromCurrentConns += conn.rawStream?.fastRecoveries || 0
+    }
+
+    return countFromCurrentConns + this._fastRecoveriesOfClosedSwarmStreams
   }
 
   getBytesTransmittedAcrossAllStreams () {
@@ -363,6 +386,21 @@ class HyperswarmStats {
       help: 'Average size of the Maximum Transmission Unit (over all hyperswarm connections)',
       collect () {
         this.set(self.getAvgMTU())
+      }
+    })
+
+    new promClient.Gauge({ // eslint-disable-line no-new
+      name: 'hyperswarm_total_retransmits_over_swarm_streams',
+      help: 'Total UDX retransmits (after a lost packet), summed across the streams exposed explicitly by hyperswarm connections',
+      collect () {
+        this.set(self.getRetransmitsAcrossAllStreams())
+      }
+    })
+    new promClient.Gauge({ // eslint-disable-line no-new
+      name: 'hyperswarm_total_fast_recoveries_over_swarm_streams',
+      help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
+      collect () {
+        this.set(self.getFastRecoveriesAcrossAllStreams())
       }
     })
   }
