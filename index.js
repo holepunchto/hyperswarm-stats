@@ -18,6 +18,7 @@ class HyperswarmStats {
         this._packetsReceivedOverClosedSwarmStreams += conn.rawStream?.packetsReceived || 0
         this._retransmitsOfClosedSwarmStreams += conn.rawStream?.retransmits
         this._fastRecoveriesOfClosedSwarmStreams += conn.rawStream?.fastRecoveries
+        this._rtoCountOfClosedSwarmStreams += conn.rawStream?.rtoCount
       })
     })
   }
