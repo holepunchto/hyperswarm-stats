@@ -8,6 +8,7 @@ class HyperswarmStats {
     this._packetsReceivedOverClosedSwarmStreams = 0
     this._retransmitsOfClosedSwarmStreams = 0
     this._fastRecoveriesOfClosedSwarmStreams = 0
+    this._rtoCountOfClosedSwarmStreams = 0
 
     swarm.on('connection', conn => {
       conn.on('close', () => {
@@ -79,6 +80,15 @@ class HyperswarmStats {
     }
 
     return countFromCurrentConns + this._fastRecoveriesOfClosedSwarmStreams
+  }
+
+  getRTOCountAcrossAllStreams () {
+    let countFromCurrentConns = 0
+    for (const conn of this.swarm.connections) {
+      countFromCurrentConns += conn.rawStream?.rtoCount || 0
+    }
+
+    return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
   }
 
   getBytesTransmittedAcrossAllStreams () {
@@ -401,6 +411,13 @@ class HyperswarmStats {
       help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
       collect () {
         this.set(self.getFastRecoveriesAcrossAllStreams())
+      }
+    })
+    new promClient.Gauge({ // eslint-disable-line no-new
+      name: 'hyperswarm_total_rto_count_over_swarm_streams',
+      help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
+      collect () {
+        this.set(self.getRTOCountAcrossAllStreams())
       }
     })
   }
