@@ -269,28 +269,28 @@ class HyperswarmStats {
     })
 
     new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_bytes_transmitted',
+      name: 'udx_total_bytes_transmitted',
       help: 'Total bytes transmitted by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxBytesTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_packets_transmitted',
+      name: 'udx_total_packets_transmitted',
       help: 'Total packets transmitted by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxPacketsTransmitted)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_bytes_received',
+      name: 'udx_total_bytes_received',
       help: 'Total bytes received by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxBytesReceived)
       }
     })
     new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_packets_received',
+      name: 'udx_total_packets_received',
       help: 'Total packets received by the hyperswarm and the DHT',
       collect () {
         this.set(self.udxPacketsReceived)
