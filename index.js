@@ -9,9 +9,9 @@ class HyperswarmStats {
     this._packetsTransmittedOverClosedSwarmStreams = 0
     this._bytesReceivedOverClosedSwarmStreams = 0
     this._packetsReceivedOverClosedSwarmStreams = 0
-    this._retransmitsOfClosedSwarmStreams = 0
-    this._fastRecoveriesOfClosedSwarmStreams = 0
-    this._rtoCountOfClosedSwarmStreams = 0
+    // this._retransmitsOfClosedSwarmStreams = 0
+    // this._fastRecoveriesOfClosedSwarmStreams = 0
+    // this._rtoCountOfClosedSwarmStreams = 0
 
     swarm.on('connection', conn => {
       conn.on('close', () => {
@@ -19,9 +19,9 @@ class HyperswarmStats {
         this._packetsTransmittedOverClosedSwarmStreams += conn.rawStream?.packetsTransmitted || 0
         this._bytesReceivedOverClosedSwarmStreams += conn.rawStream?.bytesReceived || 0
         this._packetsReceivedOverClosedSwarmStreams += conn.rawStream?.packetsReceived || 0
-        this._retransmitsOfClosedSwarmStreams += conn.rawStream?.retransmits
-        this._fastRecoveriesOfClosedSwarmStreams += conn.rawStream?.fastRecoveries
-        this._rtoCountOfClosedSwarmStreams += conn.rawStream?.rtoCount
+        // this._retransmitsOfClosedSwarmStreams += conn.rawStream?.retransmits
+        // this._fastRecoveriesOfClosedSwarmStreams += conn.rawStream?.fastRecoveries
+        // this._rtoCountOfClosedSwarmStreams += conn.rawStream?.rtoCount
       })
     })
   }
@@ -60,32 +60,32 @@ class HyperswarmStats {
     return totalMTU / count
   }
 
-  getRetransmitsAcrossAllStreams () {
-    let countFromCurrentConns = 0
-    for (const conn of this.swarm.connections) {
-      countFromCurrentConns += conn.rawStream?.retransmits || 0
-    }
+  // getRetransmitsAcrossAllStreams () {
+  //   let countFromCurrentConns = 0
+  //   for (const conn of this.swarm.connections) {
+  //     countFromCurrentConns += conn.rawStream?.retransmits || 0
+  //   }
 
-    return countFromCurrentConns + this._retransmitsOfClosedSwarmStreams
-  }
+  //   return countFromCurrentConns + this._retransmitsOfClosedSwarmStreams
+  // }
 
-  getFastRecoveriesAcrossAllStreams () {
-    let countFromCurrentConns = 0
-    for (const conn of this.swarm.connections) {
-      countFromCurrentConns += conn.rawStream?.fastRecoveries || 0
-    }
+  // getFastRecoveriesAcrossAllStreams () {
+  //   let countFromCurrentConns = 0
+  //   for (const conn of this.swarm.connections) {
+  //     countFromCurrentConns += conn.rawStream?.fastRecoveries || 0
+  //   }
 
-    return countFromCurrentConns + this._fastRecoveriesOfClosedSwarmStreams
-  }
+  //   return countFromCurrentConns + this._fastRecoveriesOfClosedSwarmStreams
+  // }
 
-  getRTOCountAcrossAllStreams () {
-    let countFromCurrentConns = 0
-    for (const conn of this.swarm.connections) {
-      countFromCurrentConns += conn.rawStream?.rtoCount || 0
-    }
+  // getRTOCountAcrossAllStreams () {
+  //   let countFromCurrentConns = 0
+  //   for (const conn of this.swarm.connections) {
+  //     countFromCurrentConns += conn.rawStream?.rtoCount || 0
+  //   }
 
-    return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
-  }
+  //   return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
+  // }
 
   getBytesTransmittedAcrossAllStreams () {
     let bytesFromCurrentConns = 0
@@ -221,27 +221,27 @@ class HyperswarmStats {
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_retransmits_over_swarm_streams',
-      help: 'Total UDX retransmits (after a lost packet), summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
-        this.set(self.getRetransmitsAcrossAllStreams())
-      }
-    })
-    new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_fast_recoveries_over_swarm_streams',
-      help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
-        this.set(self.getFastRecoveriesAcrossAllStreams())
-      }
-    })
-    new promClient.Gauge({ // eslint-disable-line no-new
-      name: 'hyperswarm_total_rto_count_over_swarm_streams',
-      help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
-        this.set(self.getRTOCountAcrossAllStreams())
-      }
-    })
+    // new promClient.Gauge({ // eslint-disable-line no-new
+    //   name: 'hyperswarm_total_retransmits_over_swarm_streams',
+    //   help: 'Total UDX retransmits (after a lost packet), summed across the streams exposed explicitly by hyperswarm connections',
+    //   collect () {
+    //     this.set(self.getRetransmitsAcrossAllStreams())
+    //   }
+    // })
+    // new promClient.Gauge({ // eslint-disable-line no-new
+    //   name: 'hyperswarm_total_fast_recoveries_over_swarm_streams',
+    //   help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
+    //   collect () {
+    //     this.set(self.getFastRecoveriesAcrossAllStreams())
+    //   }
+    // })
+    // new promClient.Gauge({ // eslint-disable-line no-new
+    //   name: 'hyperswarm_total_rto_count_over_swarm_streams',
+    //   help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
+    //   collect () {
+    //     this.set(self.getRTOCountAcrossAllStreams())
+    //   }
+    // })
   }
 }
 
