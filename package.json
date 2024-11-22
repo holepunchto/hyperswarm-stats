@@ -32,6 +32,6 @@
     "standard": "^17.1.0"
   },
   "dependencies": {
-    "hyperdht-stats": "1.0.0"
+    "hyperdht-stats": "^1.0.0"
   }
 }
