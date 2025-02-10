@@ -127,6 +127,26 @@ class HyperswarmStats {
     return this.swarm.peers.size
   }
 
+  summary () {
+    return {
+      packetsReceived: this.getPacketsReceivedAcrossAllStreams(),
+      packetsTransmitted: this.getPacketsTransmittedAcrossAllStreams(),
+      bytesReceived: this.getBytesReceivedAcrossAllStreams(),
+      bytesTransmitted: this.getBytesTransmittedAcrossAllStreams(),
+      rtoCount: this.getRTOCountAcrossAllStreams(),
+      fastRecoveries: this.getFastRecoveriesAcrossAllStreams(),
+      retransmits: this.getRetransmitsAcrossAllStreams(),
+      avgMtu: this.getAvgMTU(),
+      avgCongestionWindow: this.getAvgCongestionWindow(),
+      updates: this.updates,
+      clientConnectionsOpened: this.connects.client.opened,
+      clientConnectionsClosed: this.connects.client.closed,
+      clientConnectionsAttempted: this.connects.client.attempted,
+      serverConnectionsOpened: this.connects.server.opened,
+      serverConnectionsClosed: this.connects.server.closed
+    }
+  }
+
   registerPrometheusMetrics (promClient) {
     this.dhtStats.registerPrometheusMetrics(promClient)
 

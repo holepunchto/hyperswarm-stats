@@ -128,6 +128,8 @@ test(async (t) => {
     t.is(getMetricValue(lines, 'hyperswarm_total_rto_count_over_swarm_streams'), 0, 'hyperswarm_total_rto_count_over_swarm_streams')
   }
 
+  t.ok(stats.summary().packetsReceived != null, 'asDict works') // Just a sanity check that it does not crash
+
   await swarm2.destroy()
   await tDisconnectServer
   await new Promise(resolve => setImmediate(resolve)) // apparently the nr of closed connections isn't updated immediately
