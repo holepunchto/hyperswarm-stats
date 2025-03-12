@@ -148,7 +148,9 @@ test('toString', async (t) => {
   const swarm = new Hyperswarm({ bootstrap })
   const stats = new HyperswarmStats(swarm)
   const str = stats.toString()
-  t.ok(str.includes('Hyperswarm Stats'), 'toString does not throw')
+  t.ok(str.includes('Hyperswarm Stats'), 'toString includes swarm')
+  t.ok(str.includes('DHT Stats'), 'toString includes dht stats')
+  t.ok(str.includes('UDX Stats'), 'toString includes udx stats')
 
   await swarm.destroy()
   await testnet.destroy()

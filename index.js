@@ -144,7 +144,7 @@ class HyperswarmStats {
   - hyperswarm_total_retransmits_over_swarm_streams: ${this.getRetransmitsAcrossAllStreams()}
   - hyperswarm_total_fast_recoveries_over_swarm_streams: ${this.getFastRecoveriesAcrossAllStreams()}
   - hyperswarm_total_rto_count_over_swarm_streams: ${this.getRTOCountAcrossAllStreams()}
-    `
+${this.dhtStats.toString()}`
   }
 
   registerPrometheusMetrics (promClient) {
