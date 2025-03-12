@@ -127,6 +127,26 @@ class HyperswarmStats {
     return this.swarm.peers.size
   }
 
+  toString () {
+    return `Hyperswarm Stats
+  - hyperswarm_nr_peers: ${this.nrPeers}
+  - hyperswarm_client_connections_opened: ${this.connects.client.opened}
+  - hyperswarm_client_connections_closed: ${this.connects.client.closed}
+  - hyperswarm_client_connections_attempted: ${this.connects.client.attempted}
+  - hyperswarm_server_connections_opened: ${this.connects.server.opened}
+  - hyperswarm_server_connections_closed: ${this.connects.server.closed}
+  - hyperswarm_total_bytes_transmitted_over_swarm_streams: ${this.getBytesTransmittedAcrossAllStreams()}
+  - hyperswarm_total_bytes_received_over_swarm_streams: ${this.getBytesReceivedAcrossAllStreams()}
+  - hyperswarm_total_packets_transmitted_over_swarm_streams: ${this.getPacketsTransmittedAcrossAllStreams()}
+  - hyperswarm_total_packets_received_over_swarm_streams: ${this.getPacketsReceivedAcrossAllStreams()}
+  - hyperswarm_avg_congestion_window: ${this.getAvgCongestionWindow()}
+  - hyperswarm_avg_mtu: ${this.getAvgMTU()}
+  - hyperswarm_total_retransmits_over_swarm_streams: ${this.getRetransmitsAcrossAllStreams()}
+  - hyperswarm_total_fast_recoveries_over_swarm_streams: ${this.getFastRecoveriesAcrossAllStreams()}
+  - hyperswarm_total_rto_count_over_swarm_streams: ${this.getRTOCountAcrossAllStreams()}
+    `
+  }
+
   registerPrometheusMetrics (promClient) {
     this.dhtStats.registerPrometheusMetrics(promClient)
 

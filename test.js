@@ -4,10 +4,11 @@ const promClient = require('prom-client')
 const createTestnet = require('hyperdht/testnet')
 const b4a = require('b4a')
 const SwarmStats = require('.')
+const HyperswarmStats = require('.')
 
 const DEBUG = false
 
-test(async (t) => {
+test('prometheus metrics', async (t) => {
   const tPrep = t.test('prep')
   tPrep.plan(6) // 3 times swarm1 (to all), others only 1 (to swarm1)
 
@@ -138,6 +139,19 @@ test(async (t) => {
 
     t.is(getMetricValue(lines, 'hyperswarm_server_connections_closed'), 1, 'hyperswarm_server_connections_closed')
   }
+})
+
+test('toString', async (t) => {
+  const testnet = await createTestnet()
+  const bootstrap = testnet.bootstrap
+
+  const swarm = new Hyperswarm({ bootstrap })
+  const stats = new HyperswarmStats(swarm)
+  const str = stats.toString()
+  t.ok(str.includes('Hyperswarm Stats'), 'toString does not throw')
+
+  await swarm.destroy()
+  await testnet.destroy()
 })
 
 function getMetricValue (lines, name) {
