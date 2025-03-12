@@ -26,3 +26,7 @@ stats.registerPrometheusMetrics(promClient)
 const metrics = await promClient.register.metrics()
 console.log(metrics)
 ```
+
+## Usage Without Prometheus
+
+`swarmStats.toString()` returns a string overview of all hyperswarm and DHT stats.
