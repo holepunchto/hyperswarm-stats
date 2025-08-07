@@ -30,3 +30,5 @@ console.log(metrics)
 ## Usage Without Prometheus
 
 `swarmStats.toString()` returns a string overview of all hyperswarm and DHT stats.
+
+`swarmStats.toJson()` returns a JSON overview of all hyperswarm and DHT stats.

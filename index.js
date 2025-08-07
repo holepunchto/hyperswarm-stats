@@ -127,6 +127,23 @@ class HyperswarmStats {
     return this.swarm.peers.size
   }
 
+  toJson () {
+    return {
+      dht: this.dhtStats.toJson(),
+      nrPeers: this.nrPeers,
+      connects: JSON.parse(JSON.stringify(this.connects)), // quick-and-dirty deep copy
+      bytesTransmittedOverSwarmStreams: this.getBytesTransmittedAcrossAllStreams(),
+      bytesReceivedOverSwarmStreams: this.getBytesReceivedAcrossAllStreams(),
+      packetsTransmittedOverSwarmStreams: this.getPacketsTransmittedAcrossAllStreams(),
+      packetsReceivedOverSwarmStreams: this.getPacketsReceivedAcrossAllStreams(),
+      avgCongestionWindow: this.getAvgCongestionWindow(),
+      avgMtu: this.getAvgMTU(),
+      retransmitsOverSwarmStreams: this.getRetransmitsAcrossAllStreams(),
+      fastRecoveriesOverSwarmStreams: this.getFastRecoveriesAcrossAllStreams(),
+      rtoCountOverSwarmStreams: this.getRTOCountAcrossAllStreams()
+    }
+  }
+
   toString () {
     return `Hyperswarm Stats
   - hyperswarm_nr_peers: ${this.nrPeers}
