@@ -169,8 +169,6 @@ test('toJson', async (t) => {
   // because it's not trivial due to the nested nature of the obj
   t.is(jsonStats.nrPeers, 0)
 
-  console.log(jsonStats)
-
   await swarm.destroy()
   await testnet.destroy()
 })
