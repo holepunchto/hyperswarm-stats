@@ -156,6 +156,25 @@ test('toString', async (t) => {
   await testnet.destroy()
 })
 
+test('toJson', async (t) => {
+  const testnet = await createTestnet()
+  const bootstrap = testnet.bootstrap
+
+  const swarm = new Hyperswarm({ bootstrap })
+  const stats = new HyperswarmStats(swarm)
+  const jsonStats = stats.toJson()
+
+  // Note: we do not do a proper test on whether it includes
+  // the same stats as the prometheus metrics and toString,
+  // because it's not trivial due to the nested nature of the obj
+  t.is(jsonStats.nrPeers, 0)
+
+  console.log(jsonStats)
+
+  await swarm.destroy()
+  await testnet.destroy()
+})
+
 function getMetricValue (lines, name) {
   const match = lines.find((l) => l.startsWith(`${name} `))
   if (!match) throw new Error(`No match for ${name}`)
