@@ -1,4 +1,5 @@
 const test = require('brittle')
+const { once } = require('events')
 const Hyperswarm = require('hyperswarm')
 const promClient = require('prom-client')
 const createTestnet = require('hyperdht/testnet')
@@ -170,6 +171,52 @@ test('toJson', async (t) => {
   t.is(jsonStats.nrPeers, 0)
 
   await swarm.destroy()
+  await testnet.destroy()
+})
+
+test('swarm stream counters include connections present before stats setup and have correct close accounting', async (t) => {
+  const tSetup = t.test('setup')
+  tSetup.plan(1)
+  const testnet = await createTestnet()
+  const bootstrap = testnet.bootstrap
+
+  const swarm = new Hyperswarm({ bootstrap })
+  const swarm2 = new Hyperswarm({ bootstrap })
+
+  swarm2.listen()
+  await new Promise(resolve => setTimeout(resolve, 200)) // announce
+
+  let conn = null
+  swarm.on('connection', c => {
+    if (conn) return // re-connect
+    c.on('error', () => {})
+    conn = c
+    conn.send(b4a.from('some data'))
+    setTimeout(() => tSetup.pass('setup'), 200) // stats not incremented in same or next tick
+  })
+  swarm2.on('connection', c => {
+    c.on('error', () => {})
+  })
+  swarm.joinPeer(swarm2.keyPair.publicKey)
+
+  await tSetup
+
+  const initBytesTransmitted = conn.rawStream.bytesTransmitted
+  t.ok(initBytesTransmitted > 0, 'sanity check')
+
+  const stats = new HyperswarmStats(swarm)
+  t.is(stats.getBytesTransmittedAcrossAllStreams(), initBytesTransmitted, 'correct init of existing streams')
+  const closedProm = once(conn, 'close')
+  conn.destroy()
+  const finalBytesTransmitted = conn.rawStream.bytesTransmitted
+
+  await closedProm
+
+  t.is(stats.swarm.connections.size, 0, 'closed (sanity check)')
+  t.is(stats.getBytesTransmittedAcrossAllStreams(), finalBytesTransmitted, 'Correct accounting after existing stream closed')
+
+  await swarm.destroy()
+  await swarm2.destroy()
   await testnet.destroy()
 })
 
