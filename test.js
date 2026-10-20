@@ -24,8 +24,9 @@ test('prometheus metrics', async (t) => {
 
   let nrClosed = 0
   const swarm1 = new Hyperswarm({ bootstrap })
-  swarm1.on('connection', (conn) => {
+  swarm1.on('connection', (conn, peer) => {
     tPrep.pass('swarm1 connected')
+    console.log('swarm1 connected. Client?', peer.client)
     conn.on('error', (err) => {
       if (DEBUG) console.log('swarm4 error', err.stack)
     })
