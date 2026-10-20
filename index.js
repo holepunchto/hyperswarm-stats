@@ -1,7 +1,7 @@
 const HyperDhtStats = require('hyperdht-stats')
 
 class HyperswarmStats {
-  constructor (swarm) {
+  constructor(swarm) {
     this.swarm = swarm
     this.dhtStats = new HyperDhtStats(this.swarm.dht)
 
@@ -13,7 +13,7 @@ class HyperswarmStats {
     this._fastRecoveriesOfClosedSwarmStreams = 0
     this._rtoCountOfClosedSwarmStreams = 0
 
-    const onconnection = conn => {
+    const onconnection = (conn) => {
       conn.on('close', () => {
         this._bytesTransmittedOverClosedSwarmStreams += conn.rawStream?.bytesTransmitted || 0
         this._packetsTransmittedOverClosedSwarmStreams += conn.rawStream?.packetsTransmitted || 0
@@ -29,15 +29,15 @@ class HyperswarmStats {
     swarm.on('connection', onconnection)
   }
 
-  get connects () {
+  get connects() {
     return this.swarm.stats.connects
   }
 
-  get updates () {
+  get updates() {
     return this.swarm.stats.updates
   }
 
-  getAvgCongestionWindow () {
+  getAvgCongestionWindow() {
     let totalCongestionWindow = 0
     let count = 0
     for (const conn of this.swarm.connections) {
@@ -50,7 +50,7 @@ class HyperswarmStats {
     return totalCongestionWindow / count
   }
 
-  getAvgMTU () {
+  getAvgMTU() {
     let totalMTU = 0
     let count = 0
     for (const conn of this.swarm.connections) {
@@ -63,7 +63,7 @@ class HyperswarmStats {
     return totalMTU / count
   }
 
-  getRetransmitsAcrossAllStreams () {
+  getRetransmitsAcrossAllStreams() {
     let countFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       countFromCurrentConns += conn.rawStream?.retransmits || 0
@@ -72,7 +72,7 @@ class HyperswarmStats {
     return countFromCurrentConns + this._retransmitsOfClosedSwarmStreams
   }
 
-  getFastRecoveriesAcrossAllStreams () {
+  getFastRecoveriesAcrossAllStreams() {
     let countFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       countFromCurrentConns += conn.rawStream?.fastRecoveries || 0
@@ -81,7 +81,7 @@ class HyperswarmStats {
     return countFromCurrentConns + this._fastRecoveriesOfClosedSwarmStreams
   }
 
-  getRTOCountAcrossAllStreams () {
+  getRTOCountAcrossAllStreams() {
     let countFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       countFromCurrentConns += conn.rawStream?.rtoCount || 0
@@ -90,7 +90,7 @@ class HyperswarmStats {
     return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
   }
 
-  getBytesTransmittedAcrossAllStreams () {
+  getBytesTransmittedAcrossAllStreams() {
     let bytesFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       bytesFromCurrentConns += conn.rawStream?.bytesTransmitted || 0
@@ -99,7 +99,7 @@ class HyperswarmStats {
     return bytesFromCurrentConns + this._bytesTransmittedOverClosedSwarmStreams
   }
 
-  getBytesReceivedAcrossAllStreams () {
+  getBytesReceivedAcrossAllStreams() {
     let bytesFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       bytesFromCurrentConns += conn.rawStream?.bytesReceived || 0
@@ -108,7 +108,7 @@ class HyperswarmStats {
     return bytesFromCurrentConns + this._bytesReceivedOverClosedSwarmStreams
   }
 
-  getPacketsTransmittedAcrossAllStreams () {
+  getPacketsTransmittedAcrossAllStreams() {
     let packetsFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       packetsFromCurrentConns += conn.rawStream?.packetsTransmitted || 0
@@ -117,7 +117,7 @@ class HyperswarmStats {
     return packetsFromCurrentConns + this._packetsTransmittedOverClosedSwarmStreams
   }
 
-  getPacketsReceivedAcrossAllStreams () {
+  getPacketsReceivedAcrossAllStreams() {
     let packetsFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
       packetsFromCurrentConns += conn.rawStream?.packetsReceived || 0
@@ -126,11 +126,11 @@ class HyperswarmStats {
     return packetsFromCurrentConns + this._packetsReceivedOverClosedSwarmStreams
   }
 
-  get nrPeers () {
+  get nrPeers() {
     return this.swarm.peers.size
   }
 
-  toJson () {
+  toJson() {
     return {
       dht: this.dhtStats.toJson(),
       nrPeers: this.nrPeers,
@@ -147,7 +147,7 @@ class HyperswarmStats {
     }
   }
 
-  toString () {
+  toString() {
     return `Hyperswarm Stats
   - hyperswarm_nr_peers: ${this.nrPeers}
   - hyperswarm_client_connections_opened: ${this.connects.client.opened}
@@ -167,118 +167,133 @@ class HyperswarmStats {
 ${this.dhtStats.toString()}`
   }
 
-  registerPrometheusMetrics (promClient) {
+  registerPrometheusMetrics(promClient) {
     this.dhtStats.registerPrometheusMetrics(promClient)
 
     const self = this
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_nr_peers',
       help: 'Number of peers this swarm is connected to',
-      collect () {
+      collect() {
         this.set(self.nrPeers)
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_opened',
       help: 'Total number of client connections opened by the swarm',
-      collect () {
+      collect() {
         this.set(self.connects.client.opened)
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_closed',
       help: 'Total number of client connections closed by the swarm',
-      collect () {
+      collect() {
         this.set(self.connects.client.closed)
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_attempted',
       help: 'Total number of client connections attempted by the swarm',
-      collect () {
+      collect() {
         this.set(self.connects.client.attempted)
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_server_connections_opened',
       help: 'Total number of server connections opened by the swarm',
-      collect () {
+      collect() {
         this.set(self.connects.server.opened)
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_server_connections_closed',
       help: 'Total number of server connections closed by the swarm',
-      collect () {
+      collect() {
         this.set(self.connects.server.closed)
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_transmitted_over_swarm_streams',
       help: 'Total bytes transmitted over the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getBytesTransmittedAcrossAllStreams())
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_received_over_swarm_streams',
       help: 'Total bytes received over the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getBytesReceivedAcrossAllStreams())
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_transmitted_over_swarm_streams',
       help: 'Total packets transmitted over the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getPacketsTransmittedAcrossAllStreams())
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_received_over_swarm_streams',
       help: 'Total packets received over the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getPacketsReceivedAcrossAllStreams())
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_avg_congestion_window',
       help: 'Average size of the congestion window (over all hyperswarm connections)',
-      collect () {
+      collect() {
         this.set(self.getAvgCongestionWindow())
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_avg_mtu',
       help: 'Average size of the Maximum Transmission Unit (over all hyperswarm connections)',
-      collect () {
+      collect() {
         this.set(self.getAvgMTU())
       }
     })
 
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_retransmits_over_swarm_streams',
       help: 'Total UDX retransmits (after a lost packet), summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getRetransmitsAcrossAllStreams())
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_fast_recoveries_over_swarm_streams',
       help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getFastRecoveriesAcrossAllStreams())
       }
     })
-    new promClient.Gauge({ // eslint-disable-line no-new
+    new promClient.Gauge({
+      // eslint-disable-line no-new
       name: 'hyperswarm_total_rto_count_over_swarm_streams',
       help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
-      collect () {
+      collect() {
         this.set(self.getRTOCountAcrossAllStreams())
       }
     })

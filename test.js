@@ -1,7 +1,7 @@
 const test = require('brittle')
 const { once } = require('events')
 const Hyperswarm = require('hyperswarm')
-const promClient = require('prom-client')
+const promClient = require('bare-prom-client')
 const createTestnet = require('hyperdht/testnet')
 const b4a = require('b4a')
 const SwarmStats = require('.')
@@ -97,48 +97,152 @@ test('prometheus metrics', async (t) => {
 
     t.is(getMetricValue(lines, 'dht_total_queries') > 1, true, 'dht_total_queries')
     t.is(getMetricValue(lines, 'hyperswarm_nr_peers'), 3, 'hyperswarm_nr_peers')
-    t.is(getMetricValue(lines, 'hyperswarm_client_connections_opened'), 2, 'hyperswarm_client_connections_opened')
-    t.is(getMetricValue(lines, 'hyperswarm_client_connections_closed'), 1, 'hyperswarm_client_connections_opened')
-    t.is(getMetricValue(lines, 'hyperswarm_client_connections_attempted'), 2, 'hyperswarm_client_connections_opened')
-    t.is(getMetricValue(lines, 'hyperswarm_server_connections_opened'), 1, 'hyperswarm_server_connections_opened')
-    t.is(getMetricValue(lines, 'hyperswarm_server_connections_closed'), 0, 'hyperswarm_server_connections_closed')
+    t.is(
+      getMetricValue(lines, 'hyperswarm_client_connections_opened'),
+      2,
+      'hyperswarm_client_connections_opened'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_client_connections_closed'),
+      1,
+      'hyperswarm_client_connections_opened'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_client_connections_attempted'),
+      2,
+      'hyperswarm_client_connections_opened'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_server_connections_opened'),
+      1,
+      'hyperswarm_server_connections_opened'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_server_connections_closed'),
+      0,
+      'hyperswarm_server_connections_closed'
+    )
     t.is(hasMetric(lines, 'dht_consistent_punches'), true, 'dht_consistent_punches')
     t.is(hasMetric(lines, 'dht_random_punches'), true, 'dht_random_punches')
     t.is(hasMetric(lines, 'dht_open_punches'), true, 'dht_open_punches')
     t.is(hasMetric(lines, 'dht_active_queries'), true, 'dht_active_queries')
     t.is(hasMetric(lines, 'dht_total_queries'), true, 'dht_total_queries')
-    t.is(getMetricValue(lines, 'udx_total_bytes_transmitted') > 1, true, 'hyperswarm_total_bytes_transmitted')
-    t.is(getMetricValue(lines, 'udx_total_packets_transmitted') > 1, true, 'hyperswarm_total_packets_transmitted')
-    t.is(getMetricValue(lines, 'udx_total_bytes_received') > 1, true, 'hyperswarm_total_bytes_received')
-    t.is(getMetricValue(lines, 'udx_total_packets_received') > 1, true, 'hyperswarm_total_packets_received')
-    t.is(getMetricValue(lines, 'dht_client_socket_bytes_transmitted') > 1, true, 'dht_client_socket_bytes_transmitted')
-    t.is(getMetricValue(lines, 'dht_client_socket_packets_transmitted') > 1, true, 'dht_client_socket_packets_transmitted')
-    t.is(getMetricValue(lines, 'dht_client_socket_bytes_received') > 1, true, 'dht_client_socket_bytes_received')
-    t.is(getMetricValue(lines, 'dht_client_socket_packets_received') > 1, true, 'dht_client_socket_packets_received')
-    t.is(getMetricValue(lines, 'dht_server_socket_bytes_transmitted') > 1, true, 'dht_server_socket_bytes_transmitted')
-    t.is(getMetricValue(lines, 'dht_server_socket_packets_transmitted') > 1, true, 'dht_server_socket_packets_transmitted')
-    t.is(getMetricValue(lines, 'dht_server_socket_bytes_received') > 1, true, 'dht_server_socket_bytes_received')
-    t.is(getMetricValue(lines, 'dht_server_socket_packets_received') > 1, true, 'dht_server_socket_packets_received')
-    t.is(getMetricValue(lines, 'hyperswarm_total_bytes_transmitted_over_swarm_streams') > 1, true, 'hyperswarm_total_bytes_transmitted_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_total_bytes_received_over_swarm_streams') > 1, true, 'hyperswarm_total_bytes_received_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_total_packets_transmitted_over_swarm_streams') > 1, true, 'hyperswarm_total_packets_transmitted_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_total_packets_received_over_swarm_streams') > 1, true, 'hyperswarm_total_packets_received_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_avg_congestion_window') > 1, true, 'hyperswarm_avg_congestion_window')
+    t.is(
+      getMetricValue(lines, 'udx_total_bytes_transmitted') > 1,
+      true,
+      'hyperswarm_total_bytes_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'udx_total_packets_transmitted') > 1,
+      true,
+      'hyperswarm_total_packets_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'udx_total_bytes_received') > 1,
+      true,
+      'hyperswarm_total_bytes_received'
+    )
+    t.is(
+      getMetricValue(lines, 'udx_total_packets_received') > 1,
+      true,
+      'hyperswarm_total_packets_received'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_client_socket_bytes_transmitted') > 1,
+      true,
+      'dht_client_socket_bytes_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_client_socket_packets_transmitted') > 1,
+      true,
+      'dht_client_socket_packets_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_client_socket_bytes_received') > 1,
+      true,
+      'dht_client_socket_bytes_received'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_client_socket_packets_received') > 1,
+      true,
+      'dht_client_socket_packets_received'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_server_socket_bytes_transmitted') > 1,
+      true,
+      'dht_server_socket_bytes_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_server_socket_packets_transmitted') > 1,
+      true,
+      'dht_server_socket_packets_transmitted'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_server_socket_bytes_received') > 1,
+      true,
+      'dht_server_socket_bytes_received'
+    )
+    t.is(
+      getMetricValue(lines, 'dht_server_socket_packets_received') > 1,
+      true,
+      'dht_server_socket_packets_received'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_bytes_transmitted_over_swarm_streams') > 1,
+      true,
+      'hyperswarm_total_bytes_transmitted_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_bytes_received_over_swarm_streams') > 1,
+      true,
+      'hyperswarm_total_bytes_received_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_packets_transmitted_over_swarm_streams') > 1,
+      true,
+      'hyperswarm_total_packets_transmitted_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_packets_received_over_swarm_streams') > 1,
+      true,
+      'hyperswarm_total_packets_received_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_avg_congestion_window') > 1,
+      true,
+      'hyperswarm_avg_congestion_window'
+    )
     t.is(getMetricValue(lines, 'hyperswarm_avg_mtu') > 1, true, 'hyperswarm_avg_mtu')
-    t.is(getMetricValue(lines, 'hyperswarm_total_retransmits_over_swarm_streams'), 0, 'hyperswarm_total_retransmits_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_total_fast_recoveries_over_swarm_streams'), 0, 'hyperswarm_total_fast_recoveries_over_swarm_streams')
-    t.is(getMetricValue(lines, 'hyperswarm_total_rto_count_over_swarm_streams'), 0, 'hyperswarm_total_rto_count_over_swarm_streams')
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_retransmits_over_swarm_streams'),
+      0,
+      'hyperswarm_total_retransmits_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_fast_recoveries_over_swarm_streams'),
+      0,
+      'hyperswarm_total_fast_recoveries_over_swarm_streams'
+    )
+    t.is(
+      getMetricValue(lines, 'hyperswarm_total_rto_count_over_swarm_streams'),
+      0,
+      'hyperswarm_total_rto_count_over_swarm_streams'
+    )
   }
 
   await swarm2.destroy()
   await tDisconnectServer
-  await new Promise(resolve => setImmediate(resolve)) // apparently the nr of closed connections isn't updated immediately
+  await new Promise((resolve) => setImmediate(resolve)) // apparently the nr of closed connections isn't updated immediately
 
   {
     const metrics = await promClient.register.metrics()
     const lines = metrics.split('\n')
 
-    t.is(getMetricValue(lines, 'hyperswarm_server_connections_closed'), 1, 'hyperswarm_server_connections_closed')
+    t.is(
+      getMetricValue(lines, 'hyperswarm_server_connections_closed'),
+      1,
+      'hyperswarm_server_connections_closed'
+    )
   }
 })
 
@@ -184,17 +288,17 @@ test('swarm stream counters include connections present before stats setup and h
   const swarm2 = new Hyperswarm({ bootstrap })
 
   swarm2.listen()
-  await new Promise(resolve => setTimeout(resolve, 200)) // announce
+  await new Promise((resolve) => setTimeout(resolve, 200)) // announce
 
   let conn = null
-  swarm.on('connection', c => {
+  swarm.on('connection', (c) => {
     if (conn) return // re-connect
     c.on('error', () => {})
     conn = c
     conn.send(b4a.from('some data'))
     setTimeout(() => tSetup.pass('setup'), 200) // stats not incremented in same or next tick
   })
-  swarm2.on('connection', c => {
+  swarm2.on('connection', (c) => {
     c.on('error', () => {})
   })
   swarm.joinPeer(swarm2.keyPair.publicKey)
@@ -205,7 +309,11 @@ test('swarm stream counters include connections present before stats setup and h
   t.ok(initBytesTransmitted > 0, 'sanity check')
 
   const stats = new HyperswarmStats(swarm)
-  t.is(stats.getBytesTransmittedAcrossAllStreams(), initBytesTransmitted, 'correct init of existing streams')
+  t.is(
+    stats.getBytesTransmittedAcrossAllStreams(),
+    initBytesTransmitted,
+    'correct init of existing streams'
+  )
   const closedProm = once(conn, 'close')
   conn.destroy()
   const finalBytesTransmitted = conn.rawStream.bytesTransmitted
@@ -213,14 +321,18 @@ test('swarm stream counters include connections present before stats setup and h
   await closedProm
 
   t.is(stats.swarm.connections.size, 0, 'closed (sanity check)')
-  t.is(stats.getBytesTransmittedAcrossAllStreams(), finalBytesTransmitted, 'Correct accounting after existing stream closed')
+  t.is(
+    stats.getBytesTransmittedAcrossAllStreams(),
+    finalBytesTransmitted,
+    'Correct accounting after existing stream closed'
+  )
 
   await swarm.destroy()
   await swarm2.destroy()
   await testnet.destroy()
 })
 
-function getMetricValue (lines, name) {
+function getMetricValue(lines, name) {
   const match = lines.find((l) => l.startsWith(`${name} `))
   if (!match) throw new Error(`No match for ${name}`)
 
@@ -230,7 +342,7 @@ function getMetricValue (lines, name) {
   return value
 }
 
-function hasMetric (lines, name) {
+function hasMetric(lines, name) {
   const match = lines.find((l) => l.startsWith(`${name} `))
   return match !== undefined
 }
