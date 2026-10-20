@@ -7,7 +7,7 @@ const b4a = require('b4a')
 const SwarmStats = require('.')
 const HyperswarmStats = require('.')
 
-const DEBUG = false
+const DEBUG = true
 
 test('prometheus metrics', async (t) => {
   const tPrep = t.test('prep')
@@ -26,7 +26,9 @@ test('prometheus metrics', async (t) => {
   const swarm1 = new Hyperswarm({ bootstrap })
   swarm1.on('connection', (conn) => {
     tPrep.pass('swarm1 connected')
-    conn.on('error', () => {})
+    conn.on('error', () => {
+      if (DEBUG) console.log('swarm4 error', err.stack)
+    })
     conn.on('close', () => {
       if (nrClosed++ === 0) {
         tDisconnectClient.pass('swarm1 disconnected from one client')
@@ -40,19 +42,25 @@ test('prometheus metrics', async (t) => {
   const swarm2 = new Hyperswarm({ bootstrap })
   swarm2.on('connection', (conn) => {
     tPrep.pass('swarm2 connected')
-    conn.on('error', () => {})
+    conn.on('error', () => {
+      if (DEBUG) console.log('swarm2 error', err.stack)
+    })
   })
 
   const swarm3 = new Hyperswarm({ bootstrap })
   swarm3.on('connection', (conn) => {
     tPrep.pass('swarm3 connected')
-    conn.on('error', () => {})
+    conn.on('error', () => {
+      if (DEBUG) console.log('swarm3 error', err.stack)
+    })
   })
 
   const swarm4 = new Hyperswarm({ bootstrap })
   swarm4.on('connection', (conn) => {
     tPrep.pass('swarm4 connected')
-    conn.on('error', () => {})
+    conn.on('error', () => {
+      if (DEBUG) console.log('swarm4 error', err.stack)
+    })
   })
 
   t.teardown(async () => {
