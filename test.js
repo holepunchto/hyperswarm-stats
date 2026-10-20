@@ -26,7 +26,7 @@ test('prometheus metrics', async (t) => {
   const swarm1 = new Hyperswarm({ bootstrap })
   swarm1.on('connection', (conn) => {
     tPrep.pass('swarm1 connected')
-    conn.on('error', () => {
+    conn.on('error', (err) => {
       if (DEBUG) console.log('swarm4 error', err.stack)
     })
     conn.on('close', () => {
@@ -42,7 +42,7 @@ test('prometheus metrics', async (t) => {
   const swarm2 = new Hyperswarm({ bootstrap })
   swarm2.on('connection', (conn) => {
     tPrep.pass('swarm2 connected')
-    conn.on('error', () => {
+    conn.on('error', (err) => {
       if (DEBUG) console.log('swarm2 error', err.stack)
     })
   })
@@ -50,7 +50,7 @@ test('prometheus metrics', async (t) => {
   const swarm3 = new Hyperswarm({ bootstrap })
   swarm3.on('connection', (conn) => {
     tPrep.pass('swarm3 connected')
-    conn.on('error', () => {
+    conn.on('error', (err) => {
       if (DEBUG) console.log('swarm3 error', err.stack)
     })
   })
@@ -58,7 +58,7 @@ test('prometheus metrics', async (t) => {
   const swarm4 = new Hyperswarm({ bootstrap })
   swarm4.on('connection', (conn) => {
     tPrep.pass('swarm4 connected')
-    conn.on('error', () => {
+    conn.on('error', (err) => {
       if (DEBUG) console.log('swarm4 error', err.stack)
     })
   })
