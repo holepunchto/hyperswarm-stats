@@ -84,8 +84,6 @@ test('prometheus metrics', async (t) => {
   swarm2.join(key2, { server: false, client: true })
 
   await tPrep
-  // Flakes on Windows without this (nothing transferred yet on client socket)
-  await new Promise((resolve) => setTimeout(resolve, 250))
 
   // close 1 client
   await swarm3.destroy()
