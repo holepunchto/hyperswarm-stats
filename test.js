@@ -79,14 +79,14 @@ test('prometheus metrics', async (t) => {
   const key3 = b4a.from('c'.repeat(64), 'hex')
 
   swarm3.join(key3, { server: true, client: false })
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
   swarm4.join(key3, { server: true, client: false })
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   swarm1.join(key1, { server: true, client: false })
   swarm1.join(key2, { server: true, client: false })
   swarm1.join(key3, { server: false, client: true })
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   swarm2.join(key1, { server: false, client: true })
   swarm2.join(key2, { server: false, client: true })
