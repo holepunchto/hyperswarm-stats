@@ -23,7 +23,7 @@ test('prometheus metrics', async (t) => {
   const bootstrap = testnet.bootstrap
 
   let nrClosed = 0
-  const swarm1 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Hyperswarm({ bootstrap, firewalled: false })
   swarm1.on('connection', (conn, peer) => {
     tPrep.pass('swarm1 connected')
     console.log('swarm1 connected. Client?', peer.client)
