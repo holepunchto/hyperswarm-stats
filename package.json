@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "lunte && prettier --check .",
-    "test": "npm run lint && brittle test.js",
+    "test": "npm run lint && brittle-node test.js",
     "test:bare": "brittle-bare test.js"
   },
   "repository": {
@@ -31,7 +31,7 @@
     "b4a": "^1.6.6",
     "bare-events": "^2.9.2",
     "bare-prom-client": "^15.1.9",
-    "brittle": "^3.6.1",
+    "brittle": "^4.0.0",
     "hyperswarm": "^4.8.2",
     "lunte": "^1.8.6",
     "prettier": "^3.9.10",

@@ -172,7 +172,6 @@ ${this.dhtStats.toString()}`
 
     const self = this
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_nr_peers',
       help: 'Number of peers this swarm is connected to',
       collect() {
@@ -181,7 +180,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_opened',
       help: 'Total number of client connections opened by the swarm',
       collect() {
@@ -189,7 +187,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_closed',
       help: 'Total number of client connections closed by the swarm',
       collect() {
@@ -197,7 +194,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_client_connections_attempted',
       help: 'Total number of client connections attempted by the swarm',
       collect() {
@@ -206,7 +202,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_server_connections_opened',
       help: 'Total number of server connections opened by the swarm',
       collect() {
@@ -214,7 +209,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_server_connections_closed',
       help: 'Total number of server connections closed by the swarm',
       collect() {
@@ -223,7 +217,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_transmitted_over_swarm_streams',
       help: 'Total bytes transmitted over the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -231,7 +224,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_bytes_received_over_swarm_streams',
       help: 'Total bytes received over the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -239,7 +231,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_transmitted_over_swarm_streams',
       help: 'Total packets transmitted over the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -247,7 +238,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_packets_received_over_swarm_streams',
       help: 'Total packets received over the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -256,7 +246,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_avg_congestion_window',
       help: 'Average size of the congestion window (over all hyperswarm connections)',
       collect() {
@@ -265,7 +254,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_avg_mtu',
       help: 'Average size of the Maximum Transmission Unit (over all hyperswarm connections)',
       collect() {
@@ -274,7 +262,6 @@ ${this.dhtStats.toString()}`
     })
 
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_retransmits_over_swarm_streams',
       help: 'Total UDX retransmits (after a lost packet), summed across the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -282,7 +269,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_fast_recoveries_over_swarm_streams',
       help: 'Total UDX fast recoveries summed across the streams exposed explicitly by hyperswarm connections',
       collect() {
@@ -290,7 +276,6 @@ ${this.dhtStats.toString()}`
       }
     })
     new promClient.Gauge({
-      // eslint-disable-line no-new
       name: 'hyperswarm_total_rto_count_over_swarm_streams',
       help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
       collect() {
