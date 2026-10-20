@@ -7,7 +7,7 @@ const b4a = require('b4a')
 const SwarmStats = require('.')
 const HyperswarmStats = require('.')
 
-const DEBUG = false
+const DEBUG = true
 
 test('prometheus metrics', async (t) => {
   const tPrep = t.test('prep')
@@ -23,10 +23,13 @@ test('prometheus metrics', async (t) => {
   const bootstrap = testnet.bootstrap
 
   let nrClosed = 0
-  const swarm1 = new Hyperswarm({ bootstrap })
-  swarm1.on('connection', (conn) => {
+  const swarm1 = new Hyperswarm({ bootstrap, firewalled: false })
+  swarm1.on('connection', (conn, peer) => {
     tPrep.pass('swarm1 connected')
-    conn.on('error', () => {})
+    console.log('swarm1 connected. Client?', peer.client)
+    conn.on('error', (err) => {
+      if (DEBUG) console.log('swarm4 error', err.stack)
+    })
     conn.on('close', () => {
       if (nrClosed++ === 0) {
         tDisconnectClient.pass('swarm1 disconnected from one client')
@@ -40,19 +43,25 @@ test('prometheus metrics', async (t) => {
   const swarm2 = new Hyperswarm({ bootstrap })
   swarm2.on('connection', (conn) => {
     tPrep.pass('swarm2 connected')
-    conn.on('error', () => {})
+    conn.on('error', (err) => {
+      if (DEBUG) console.log('swarm2 error', err.stack)
+    })
   })
 
   const swarm3 = new Hyperswarm({ bootstrap })
   swarm3.on('connection', (conn) => {
     tPrep.pass('swarm3 connected')
-    conn.on('error', () => {})
+    conn.on('error', (err) => {
+      if (DEBUG) console.log('swarm3 error', err.stack)
+    })
   })
 
   const swarm4 = new Hyperswarm({ bootstrap })
   swarm4.on('connection', (conn) => {
     tPrep.pass('swarm4 connected')
-    conn.on('error', () => {})
+    conn.on('error', (err) => {
+      if (DEBUG) console.log('swarm4 error', err.stack)
+    })
   })
 
   t.teardown(async () => {
@@ -71,14 +80,14 @@ test('prometheus metrics', async (t) => {
   const key3 = b4a.from('c'.repeat(64), 'hex')
 
   swarm3.join(key3, { server: true, client: false })
-  await swarm3.flush()
+  await new Promise((resolve) => setTimeout(resolve, 500))
   swarm4.join(key3, { server: true, client: false })
-  await swarm4.flush()
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   swarm1.join(key1, { server: true, client: false })
   swarm1.join(key2, { server: true, client: false })
   swarm1.join(key3, { server: false, client: true })
-  await swarm1.flush()
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   swarm2.join(key1, { server: false, client: true })
   swarm2.join(key2, { server: false, client: true })
