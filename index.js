@@ -130,10 +130,15 @@ class HyperswarmStats {
     return this.swarm.peers.size
   }
 
+  get nrConnections() {
+    return this.swarm.connections.size
+  }
+
   toJson() {
     return {
       dht: this.dhtStats.toJson(),
       nrPeers: this.nrPeers,
+      nrConnections: this.nrConnections,
       connects: JSON.parse(JSON.stringify(this.connects)), // quick-and-dirty deep copy
       bytesTransmittedOverSwarmStreams: this.getBytesTransmittedAcrossAllStreams(),
       bytesReceivedOverSwarmStreams: this.getBytesReceivedAcrossAllStreams(),
@@ -150,6 +155,7 @@ class HyperswarmStats {
   toString() {
     return `Hyperswarm Stats
   - hyperswarm_nr_peers: ${this.nrPeers}
+  - hyperswarm_nr_connections: ${this.nrConnections}
   - hyperswarm_client_connections_opened: ${this.connects.client.opened}
   - hyperswarm_client_connections_closed: ${this.connects.client.closed}
   - hyperswarm_client_connections_attempted: ${this.connects.client.attempted}
@@ -176,6 +182,13 @@ ${this.dhtStats.toString()}`
       help: 'Number of peers this swarm is connected to',
       collect() {
         this.set(self.nrPeers)
+      }
+    })
+    new promClient.Gauge({
+      name: 'hyperswarm_nr_connections',
+      help: 'Number of current connections of the swarm',
+      collect() {
+        this.set(self.nrConnections)
       }
     })
 
