@@ -179,7 +179,7 @@ ${this.dhtStats.toString()}`
     const self = this
     new promClient.Gauge({
       name: 'hyperswarm_nr_peers',
-      help: 'Number of peers this swarm is connected to',
+      help: 'Number of swarm peers',
       collect() {
         this.set(self.nrPeers)
       }
