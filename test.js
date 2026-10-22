@@ -97,6 +97,7 @@ test('prometheus metrics', async (t) => {
 
     t.is(getMetricValue(lines, 'dht_total_queries') > 1, true, 'dht_total_queries')
     t.is(getMetricValue(lines, 'hyperswarm_nr_peers'), 3, 'hyperswarm_nr_peers')
+    t.is(getMetricValue(lines, 'hyperswarm_nr_connections') >= 2, true, 'hyperswarm_nr_connections')
     t.is(
       getMetricValue(lines, 'hyperswarm_client_connections_opened'),
       2,
