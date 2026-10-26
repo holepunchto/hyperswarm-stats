@@ -21,7 +21,7 @@ class HyperswarmStats {
         this._packetsReceivedOverClosedSwarmStreams += conn.rawStream?.packetsReceived || 0
         this._retransmitsOfClosedSwarmStreams += conn.rawStream?.retransmits
         this._fastRecoveriesOfClosedSwarmStreams += conn.rawStream?.fastRecoveries
-        this._rtoCountOfClosedSwarmStreams += conn.rawStream?.rtoCount
+        this._rtoCountOfClosedSwarmStreams += conn.rawStream?.lifetimeRtoCount || 0
       })
     }
 
@@ -84,7 +84,7 @@ class HyperswarmStats {
   getRTOCountAcrossAllStreams() {
     let countFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
-      countFromCurrentConns += conn.rawStream?.rtoCount || 0
+      countFromCurrentConns += conn.rawStream?.lifetimeRtoCount || 0
     }
 
     return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
