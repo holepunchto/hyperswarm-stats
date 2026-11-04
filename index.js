@@ -90,6 +90,18 @@ class HyperswarmStats {
     return countFromCurrentConns + this._rtoCountOfClosedSwarmStreams
   }
 
+  getStreamsByRTOCount() {
+    const counts = [0, 0, 0, 0, 0, 0, 0] // rtoCount 1-6 and 7+
+    for (const conn of this.swarm.connections) {
+      const stream = conn.rawStream
+      // rtoCount is the consecutive count only on udx-native >= 1.22.0 (with lifetimeRtoCount)
+      if (stream?.lifetimeRtoCount === undefined || !stream.rtoCount) continue
+      counts[Math.min(stream.rtoCount, 7) - 1]++
+    }
+
+    return counts
+  }
+
   getBytesTransmittedAcrossAllStreams() {
     let bytesFromCurrentConns = 0
     for (const conn of this.swarm.connections) {
@@ -148,7 +160,8 @@ class HyperswarmStats {
       avgMtu: this.getAvgMTU(),
       retransmitsOverSwarmStreams: this.getRetransmitsAcrossAllStreams(),
       fastRecoveriesOverSwarmStreams: this.getFastRecoveriesAcrossAllStreams(),
-      rtoCountOverSwarmStreams: this.getRTOCountAcrossAllStreams()
+      rtoCountOverSwarmStreams: this.getRTOCountAcrossAllStreams(),
+      streamsByRTOCount: this.getStreamsByRTOCount()
     }
   }
 
@@ -170,6 +183,7 @@ class HyperswarmStats {
   - hyperswarm_total_retransmits_over_swarm_streams: ${this.getRetransmitsAcrossAllStreams()}
   - hyperswarm_total_fast_recoveries_over_swarm_streams: ${this.getFastRecoveriesAcrossAllStreams()}
   - hyperswarm_total_rto_count_over_swarm_streams: ${this.getRTOCountAcrossAllStreams()}
+  - hyperswarm_streams_by_rto_count (1-6, 7+): ${this.getStreamsByRTOCount().join(', ')}
 ${this.dhtStats.toString()}`
   }
 
@@ -293,6 +307,17 @@ ${this.dhtStats.toString()}`
       help: 'Total UDX retransmission time-outs, summed across the streams exposed explicitly by hyperswarm connections',
       collect() {
         this.set(self.getRTOCountAcrossAllStreams())
+      }
+    })
+    new promClient.Gauge({
+      name: 'hyperswarm_streams_by_rto_count',
+      help: 'Number of streams exposed explicitly by hyperswarm connections per current consecutive UDX retransmission time-out count (no ACK progress since), rto="7+" is 7 or more',
+      labelNames: ['rto'],
+      collect() {
+        const counts = self.getStreamsByRTOCount()
+        for (let i = 0; i < counts.length; i++) {
+          this.set({ rto: i === 6 ? '7+' : String(i + 1) }, counts[i])
+        }
       }
     })
   }

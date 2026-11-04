@@ -233,6 +233,10 @@ test('prometheus metrics', async (t) => {
       0,
       'hyperswarm_total_rto_count_over_swarm_streams'
     )
+    t.ok(
+      lines.includes('hyperswarm_streams_by_rto_count{rto="1"} 0'),
+      'hyperswarm_streams_by_rto_count'
+    )
   }
 
   await swarm2.destroy()
